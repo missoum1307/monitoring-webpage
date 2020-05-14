@@ -35,12 +35,9 @@ app.get('/', (req, res) => {
 app.post('/url', (req, res) => {
 
 (async () => {
-    const browser = await puppeteer.launch({args: [
-      'no-sandbox',
-      'disable-setuid-sandbox',
-    ]});
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    // await page.setCookie(cookie);
+    await page.setCookie(cookie);
     // const cookie = await page.cookies('http://google.com');
     const request = await page.goto(req.body.url)
     const bufferContent =  await request.buffer()
