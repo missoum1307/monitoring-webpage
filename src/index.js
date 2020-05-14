@@ -6,11 +6,13 @@ const puppeteer = require('puppeteer')
 const CronJob = require('cron').CronJob
 const sgMail = require('@sendgrid/mail')
 
+
 const cookie = process.env.COOKIE
 const port = process.env.PORT || 3000 
 const url = process.env.urlDbProd
 const sendGridApiKey = process.env.sendGrid_api_key
 sgMail.setApiKey(sendGridApiKey)
+
 mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
 const db = mongoose.connection;
 db.on('error', (err)=> {
@@ -33,13 +35,19 @@ app.get('/', (req, res) => {
 app.post('/url', (req, res) => {
 
 (async () => {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({args: [
+      'no-sandbox',
+      'disable-setuid-sandbox',
+    ]});
     const page = await browser.newPage();
-    await page.setCookie(cookie);
+    // await page.setCookie(cookie);
     // const cookie = await page.cookies('http://google.com');
     const request = await page.goto(req.body.url)
+    const bufferContent =  await request.buffer()
+    const contentLength =  request.headers()['content-length']
+    console.log(contentLength, bufferContent.length)
     //console.log(cookie)
-    const url = new urlDb({ url: req.body.url, pageLength: request.headers()['content-length']})
+    const url = new urlDb({ url: req.body.url, pageLength: contentLength ? contentLength : bufferContent.length})
     try {
         await url.save()
         console.log('url has been added to Database')
@@ -54,7 +62,7 @@ app.post('/url', (req, res) => {
 
 })
 
-const job = new CronJob('1 * * * * *', () => {
+const job = new CronJob('* * */8 * * *', () => {
 
     urlDb.find({}, (err, data) => {
         
