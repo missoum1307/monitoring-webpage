@@ -15,6 +15,6 @@
     "cron": "^1.8.2",
     "express": "^4.17.1",
     "mongoose": "^5.9.13",
-    "puppeteer": "^3.0.4"
+    "puppeteer": "^3.0.3"
   }
 }
