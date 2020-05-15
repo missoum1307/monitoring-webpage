@@ -67,7 +67,7 @@ const job = new CronJob('* * */8 * * *', () => {
             let docsCount = await urlDb.countDocuments()
             for (i = 0; i < docsCount; i++) {
 
-                const browser = await puppeteer.launch();
+                const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
                 const page = await browser.newPage();
                 const request = await page.goto(data[i].url);
                 if (request.headers()['content-length'] != data[i].pageLength ) {
