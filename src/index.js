@@ -59,7 +59,7 @@ app.post('/url', (req, res) => {
 
 })
 
-const job = new CronJob('* * */8 * * *', () => {
+const job = new CronJob('* * */6 * * *', () => {
 
     urlDb.find({}, (err, data) => {
         
