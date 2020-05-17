@@ -7,6 +7,7 @@ const CronJob = require('cron').CronJob
 const sgMail = require('@sendgrid/mail')
 
 const googleSweet = JSON.parse(process.env.googleCookie)
+//console.log(JSON.parse(process.env.googleCookie))
 const port = process.env.PORT || 3000 
 const url = process.env.urlDbProd
 const sendGridApiKey = process.env.sendGrid_api_key
