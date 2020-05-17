@@ -38,7 +38,7 @@ app.post('/url', (req, res) => {
 (async () => {
     const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
     const page = await browser.newPage();
-    const cookieShow = await page.cookies('http://google.com');
+    await page.cookies('http://google.com');
     await page.setCookie(googleSweet[0])    
     const request = await page.goto(req.body.url)
     const bufferContent =  await request.buffer()
@@ -69,6 +69,8 @@ const job = new CronJob('* * */6 * * *', () => {
 
                 const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
                 const page = await browser.newPage();
+                await page.cookies('http://google.com');
+                await page.setCookie(googleSweet[0])   
                 const request = await page.goto(data[i].url);
                 const bufferContent =  await request.buffer()
                 const contentLength =  request.headers()['content-length']
